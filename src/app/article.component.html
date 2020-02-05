@@ -1,0 +1,93 @@
+<!-- <div class="text-center">
+  <p>
+      <a href="https://jsonworld.com/demo/detail/62/nodejs/Angular7-CRUD-with-nodejs-and-mysql-example" target="_top">Angular 7 with nodejs and mysql CRUD Demo & Tutorial</a>
+  </p>
+  <p>
+      <a href="http://jsonworld.com" target="_top">jsonworld.com</a>
+  </p>
+</div> -->
+
+<!-- <h1 class="text-center">Angular7 CRUD with nodejs and mysql example</h1> -->
+
+<h3 class="text-center" *ngIf="articleIdToUpdate; else create; else loadArticleByID"> 
+   Update Article for Id: {{articleIdToUpdate}}
+</h3>
+<ng-template #create>
+   <h3 class="text-center"> Create New Article </h3>
+</ng-template>
+<ng-template #loadArticleByID>
+  <h3 class="text-center"> Get Which id</h3>
+</ng-template>
+
+<div>
+ <form [formGroup]="articleForm" (ngSubmit)="onArticleFormSubmit()">
+  <table class="table-striped" style="margin:0 auto;">
+    <tr><td>Enter Title</td><td><input formControlName="title">
+	       <label *ngIf="articleForm.get('title').invalid && processValidation" [ngClass] = "'error'"> Title is required. </label>
+   	</td></tr>
+    <tr><td>Enter Category</td><td><input formControlName="category">
+	       <label *ngIf="articleForm.get('category').invalid && processValidation" [ngClass] = "'error'"> Category is required. </label>
+  </td></tr>	
+  <tr><td>Enter Description</td><td><input formControlName="description">
+  </td></tr>	
+  <tr><td>Enter BookNO</td><td><input formControlName="BookNO">
+    <label *ngIf="articleForm.get('BookNO').invalid && processValidation" [ngClass] = "'error'"> BookNO is required. </label>
+  </td></tr>
+    <td colspan="2">
+	    <button class="btn btn-default" *ngIf="!articleIdToUpdate">CREATE</button>  
+		<button class="btn btn-default" *ngIf="articleIdToUpdate">UPDATE</button>  
+      <button (click)="backToCreateArticle()" *ngIf="articleIdToUpdate">Go Back</button>
+      <!-- <button (click)="loadArticleByID" *ngIf="!articleIdToUpdate">Get that id</button> -->
+    </td>
+  </table>
+ </form> 
+ <br/>
+ <form [formGroup]="articleForm2" (ngSubmit)="onArticleFormSubmit2(allArticles)">
+  <table class="table-striped" style="margin:0 auto;" *ngIf="allArticles">
+    <tr><td>Enter Id</td><td><input formControlName="getID">
+         <label *ngIf="articleForm2.get('getID').invalid" [ngClass] = "'error'"> Id is required. </label>
+     </td></tr>	
+    <tr><td colspan="2"> 
+      <button class="btn btn-default" type="submit">GET Article By ID</button>
+  </td></tr>
+  </table>
+ </form> 
+ <br>
+ <div class="text-center" *ngIf="statusCode; else processing">
+   <div *ngIf="statusCode === 201" [ngClass] = "'success'">
+	    Article added successfully.
+   </div>   
+   <div *ngIf="statusCode === 409" [ngClass] = "'success'">
+        Article already exists.
+   </div>   	
+   <div *ngIf="statusCode === 200" [ngClass] = "'success'">
+        Article updated successfully.
+   </div>   	      
+   <div *ngIf="statusCode === 204" [ngClass] = "'success'">
+        Article deleted successfully.
+   </div>   	   
+   <div *ngIf="statusCode === 500" [ngClass] = "'error'">
+        Internal Server Error.
+   </div>	
+ </div>
+
+ <ng-template #processing>
+	<img *ngIf="requestProcessing" src="assets/images/loading.gif">
+ </ng-template>
+</div>
+<h3 class="text-center">Article List</h3>
+<table class="table-striped" style="margin:0 auto;" *ngIf="allArticles">
+  <tr><th> Id</th> <th>Title</th><th>Category</th><th>Description</th><th>BookNO</th><th></th><th></th></tr>
+  <tr *ngFor="let article of allArticles" >
+    <td>{{article.id}}</td> <td>{{article.title}}</td> <td>{{article.category}}</td><td>{{article.description}}</td><td>{{article.BookNO}}</td>
+	<td><button class="btn btn-default" type="button" (click)="loadArticleToEdit(article.id)">Edit</button> </td> 
+  <td><button class="btn btn-default" type="button" (click)="deleteArticle(article.id)">Delete</button></td>
+  </tr>
+  <tr >
+    
+  </tr>
+</table>
+
+
+
+
